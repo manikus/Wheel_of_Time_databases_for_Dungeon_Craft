@@ -1,0 +1,6 @@
+// BaseClass database file
+//	Wheel of Time
+//	December 30, 2020
+// Skill = Save Vs BR,20 = Fortitude
+// Skill = Save Vs PP,20 = Reflex
+// Skill = Save Vs PPDM,20 = Will

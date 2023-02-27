@@ -1,0 +1,2 @@
+// NPC Classes
+//	Aes Sedai, Asha'man, Blademaster, Warder, Whitecloak, Wise Woman

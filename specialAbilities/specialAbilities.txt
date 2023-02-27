@@ -1,0 +1,1903 @@
+// Special Abilities database file
+
+\(BEGIN)
+name = $EVENT_WhoTries_Attempt
+[Ability] = $VAR abLevel;
+-$VAR abName;
+-$VAR me; // character who is trying
+-$VAR abNeed;
+-$VAR abDie;
+-abName = $GET_HOOK_PARAM(5);
+-abNeed = $GET_HOOK_PARAM(6);
+-me = $IndexOf($Myself());
+-$DEBUG ("Ability name = " + abName);
+-$IF (abName == "Strength"){abLevel = $GET_CHAR_LIMITED_STR(me);}
+-$ELSE
+-	{
+-		$IF (abName == "Intelligence"){abLevel = $GET_CHAR_LIMITED_INT(me);}
+-		$ELSE
+-			{
+-				$IF (abName == "Wisdom"){abLevel = $GET_CHAR_LIMITED_WIS(me);}
+-				$ELSE
+-					{
+-						$IF (abName == "Dexterity"){abLevel = $GET_CHAR_LIMITED_DEX(me);}
+-						$ELSE
+-							{
+-								$IF (abName == "Constitution"){abLevel = $GET_CHAR_LIMITED_CON(me);}
+-								$ELSE
+-									{
+-										$IF (abName == "Charisma"){abLevel = $GET_CHAR_LIMITED_CHA(me);}
+-										$ELSE {$RETURN "N";};};};};};};
+-$IF (abNeed <# 0)
+-	{
+-		abDie = $RANDOM (0 -# abNeed);
+-$DEBUG ($SA_NAME()+" abDie = "+abDie);
+-		$IF (abLevel <# abDie){$RETURN "N";};
+-	};
+-$DEBUG ($SA_NAME()+"/Ability, Ability = "+abName+", value = "+abNeed+", actual value = "+abLevel);
+-$IF (abLevel <# abNeed){$RETURN "N";};
+[Experience] = $VAR me;
+-$VAR cls; // class
+-$VAR lvl; // level
+-$VAR par0;
+-$VAR par5;
+-$VAR par6;
+-me = $MyIndex();
+-cls = $GetHighestLevelBaseclass(me);
+-lvl = $GetBaseclassLevel(me,cls);
+-par0 = $GET_HOOK_PARAM(0);
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-$DEBUG ($SA_NAME()+"/Experience, par0 = "+par0+", name = "+par5+", level needed = "+par6+", level = "+lvl);
+-$IF (lvl <# par6){$RETURN "N";};
+[NightSkill] = $VAR time;
+-$VAR par0;
+-$VAR skillName;
+-$VAR skillLevel;
+-$VAR skillNeed;
+-$VAR skillDie;
+-time = $GET_PARTY_HOURS();
+-par0 = $GET_HOOK_PARAM(0);
+-skillName = $GET_HOOK_PARAM(5);
+-skillLevel = $SkillAdj($CharacterContext(),skillName,"","F",0);
+-skillNeed = $GET_HOOK_PARAM(6);
+-$IF (skillNeed <# 0)
+-	{
+-		skillDie = $RANDOM (0 -# skillNeed);
+-$DEBUG ($SA_NAME()+" skillDie = "+skillDie);
+-		$IF (skillLevel <# skillDie){$RETURN "N";};
+-	};
+-$DEBUG ($SA_NAME()+"/NightSkill, par0 = "+par0+", skillName = "+skillName+", skillNeed = "+skillNeed+", skillLevel = "+skillLevel);
+-$DEBUG ($SA_NAME()+"/NightSkill, time = " + time);
+-$IF (time ># 6 && time <# 18){$RETURN "N";};
+-$IF (skillLevel <# skillNeed){$RETURN "N";};
+[Skill] = $VAR skillLevel;
+-$VAR skillName;
+-$VAR skillNeed;
+-$VAR skillDie;
+-skillName = $GET_HOOK_PARAM(5);
+-skillNeed = $GET_HOOK_PARAM(6);
+-skillLevel = $SkillAdj($CharacterContext(),skillName , "", "F", 0 );
+-$IF (skillNeed <# 0)
+-	{
+-		skillDie = $RANDOM (0 -# skillNeed);
+-$DEBUG ($SA_NAME()+" skillDie = "+skillDie);
+-		$IF (skillLevel <# skillDie){$RETURN "N";};
+-	};
+-$DEBUG ($SA_NAME()+"/Skill, skill = "+skillName+", value = "+skillNeed+", actual value = "+skillLevel);
+-$IF (skillLevel <# skillNeed){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassAesSedai
+[IsBaseclassAllowed] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF (par5 == "M"){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassArmsman
+[IsBaseclassAllowed] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF (par5 == "F"){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassArmswoman
+[IsBaseclassAllowed] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF (par5 == "M"){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassAshaman
+[IsBaseclassAllowed] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF (par5 == "F"){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassWoodsman
+[IsBaseclassAllowed] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF (par5 == "F"){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassWoodswoman
+[IsBaseclassAllowed] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF (par5 == "M"){$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = baseclassNameSuppress
+[DisplayCharacterBaseclass] = $VAR par;
+-par = $SA_PARAM_GET();
+-$IF (par != "-?-?-")
+-	{
+-		$SET_HOOK_PARAM(5,"Level/XP");
+-		$RETURN;
+-	};
+\(END)
+
+\(BEGIN)
+name = casterLevel
+[SpellCasterLevel] = $VAR atk; // attacker
+-$VAR name;
+-$VAR list;
+-$VAR cls; // class of spell caster
+-$VAR adj; // level modifier
+-$VAR lvl; // level
+-atk = $IndexOf($AttackerContext());
+-name = $GET_CHAR_NAME(atk);
+-list = $SA_PARAM_GET();
+-cls = $DelimitedStringSubstring(list,0);
+-adj = $DelimitedStringSubstring(list,1);
+-lvl = $GET_CHAR_Lvl(atk,cls) -# adj;
+-$IF (cls == "monster"){$RETURN $GET_MONSTERTYPE_SA(name,"monsterLevel");};
+-$IF (cls == "item"){$RETURN adj;}
+-$ELSE
+-	{
+-		$SET_SPELL_SA($SpellContext(),"adjLevel",adj);
+-		$RETURN lvl;
+-	};
+\(END)
+
+\(BEGIN)
+name = classAesSedai
+\(END)
+
+\(BEGIN)
+name = classAshaman
+\(END)
+
+\(BEGIN)
+name = classBaseName
+[PostCreateCharacter] = $SET_CHARACTER_SA($CharacterContext(), "classBaseName", $SA_PARAM_GET());
+\(END)
+
+\(BEGIN)
+name = classBlademaster
+\(END)
+
+\(BEGIN)
+name = classDarkOnesOwnLuck
+\(END)
+
+\(BEGIN)
+name = classSuppress
+[SelectCharacterClass] = $RETURN "Y";
+\(END)
+
+\(BEGIN)
+name = classNoSpells
+[CanCastSpells] = $RETURN "N";
+[CanMemorizeSpells] = $RETURN "N";
+\(END)
+
+\(BEGIN)
+name = classWarder
+\(END)
+
+\(BEGIN)
+name = classWhitecloak
+\(END)
+
+\(BEGIN)
+name = classWiseOne
+\(END)
+
+\(BEGIN)
+name = CombatPlacement
+[PlaceMonsterClose] = $IF($GET_PARTY_FACING() >=#2){$MonsterPlacement("FbPV500E");}
+-$ELSE{$MonsterPlacement("bPV500E");};
+[PlaceMonsterFar] = $IF($GET_PARTY_FACING() >=#2){$MonsterPlacement("17FbPV500E");}
+-$ELSE{$MonsterPlacement("16FbPV500E");};
+[PlaceMonsterNear] = $IF($GET_PARTY_FACING() >=#2){$MonsterPlacement("10FbPV500E");}
+-$ELSE{$MonsterPlacement("9FbPV500E");};
+\(END)
+
+\(BEGIN)
+name = CombatRoundStart
+[StartCombatRound] = $SA_PARAM_SET("0");
+\(END)
+
+\(BEGIN)
+name = CombatRoundStart1
+[StartCombatRound] = $SA_PARAM_SET("-?-?-");
+\(END)
+
+\(BEGIN)
+name = Competing
+[AdjustInitiative] = $VAR me;
+-$VAR dex;
+-$VAR p5;
+-$VAR list;
+-$VAR adj;
+-$VAR redo;
+-me = $IndexOf($CombatantContext());
+-dex = $GET_CHAR_LIMITED_DEX(me);
+-p5 = $GET_HOOK_PARAM(5);
+-list = "$5$4$4$3$3$2$2$1$1$0$0$-1$-1$-2$-2$-3$-3$-4$-4$-5$-5$-6$-6$-7$-7";
+-adj = $DelimitedStringSubstring(list,dex);
+-$IF ($NOT($GetCombatRound()))//Past round 1
+-	{$RETURN adj;};
+-$IF (p5 != 18)// adjustment for unsurprised
+-	{$RETURN adj;};
+-$IF (adj <=# "-1" && $GET_CHAR_Exp(me,"Ranger") ># 0)// negate surprise for -2 or better
+-	{redo = 1;};
+-$IF ($GET_CHAR_Exp(me,"Ranger") ># 0 || dex == 16)// 50% negate surprise for -1 or ranger
+-	{redo = $RANDOM(2);};
+-$IF (redo ==# 1)// set new random initiative if not surprised
+-	{$RETURN $RANDOM(10) +# 9 +# adj -# 18;}
+-$ELSE {$RETURN 5;}; // set to surprised
+[AutoAction] = $RETURN $GET_COMBATANT_SA($CombatantContext(),"playerControl");
+[CombatMainMenu] = $VAR adjCombatant;
+-$VAR count;
+-$VAR t;
+-$VAR target;
+-$VAR lvl;
+-lvl = $GET_CHAR_Lvl($MyIndex(),"fighter") +# $GET_CHAR_Lvl($MyIndex(),"paladin") +# $GET_CHAR_Lvl($MyIndex(),"ranger") ;
+-$IF (lvl ># 1)
+-	{
+-		adjCombatant = $ListAdjacentCombatants($MyIndex());
+-		t = 0;
+-		count = $DelimitedStringCount(adjCombatant);
+-		$WHILE (count >=# 0)
+-			{
+-				target = $DelimitedStringSubstring(adjCombatant,count);
+-				$IF ($GET_MONSTERTYPE_SA($GET_CHAR_NAME(target),"monster_Swept") != "-?-?-" && $GET_CHAR_STATUS(target) ==# 0){t = t +# 1;};
+-				count = count -# 1;
+-			};
+-		$IF (t ># 1)
+-			{
+-				$SET_HOOK_PARAM(6, "SWEEP");
+-				$SET_HOOK_PARAM(7, 0);
+-				$SET_COMBATANT_SA($CombatantContext(),"IsSweeping",lvl);
+-			};
+-	};
+[FreeAttack-AttackOver] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$RETURN;
+[FreeAttack-CanFreeAttack] = $VAR rangeWpn;
+-rangeWpn = $GET_ITEM_SA($GET_CHAR_Ready($AttackerContext(), "WEAPON", 0),"item_CombatAim");
+-$IF (rangeWpn != "-?-?-"){$RETURN "N";};
+-$RETURN "Y";
+[GetNumberOfAttacks] = $VAR atk; // attacker
+-$VAR cls;
+-$VAR lvl;
+-$VAR name;
+-atk = $IndexOf($AttackerContext());
+-cls = $GetHighestLevelBaseclass(atk);
+-lvl = $GetBaseclassLevel(atk,cls);
+-name = $GET_CHAR_NAME(atk);
+-$IF ($GET_MONSTERTYPE_SA(name,"monsterLevel") != "-?-?-"){$RETURN;};
+-$IF (cls = "armsman" || cls = "armswoman")
+-	{
+-		$IF (lvl ># 15){$RETURN 4;};
+-		$IF (lvl ># 10){$RETURN 3;};
+-		$IF (lvl ># 5){$RETURN 2;}
+-		$ELSE {$RETURN 1;};
+-	};
+-$IF (cls = "aessedai" || cls = "ashaman")
+-	{
+-		$IF (lvl ># 13){$RETURN 2;}
+-		$ELSE {$RETURN 1;};
+-	};
+-$IF (cls = "noble")
+-	{
+-		$IF (lvl ># 14){$RETURN 3;};
+-		$IF (lvl ># 7){$RETURN 2;}
+-		$ELSE {$RETURN 1;};
+-	};
+-$IF (cls = "wanderer")
+-	{
+-		$IF (lvl ># 14){$RETURN 3;};
+-		$IF (lvl ># 7){$RETURN 2;}
+-		$ELSE {$RETURN 1;};
+-	};
+-$IF (cls = "wilder")
+-	{
+-		$IF (lvl ># 13){$RETURN 2;}
+-		$ELSE {$RETURN 1;};
+-	};
+-$IF (cls = "woodsman" || cls = "wwodswoman")
+-	{
+-		$IF (lvl ># 15){$RETURN 4;};
+-		$IF (lvl ># 10){$RETURN 3;};
+-		$IF (lvl ># 5){$RETURN 2;}
+-		$ELSE {$RETURN 1;};
+-	};
+[Guarding-AttackOver] = $RETURN;
+[Guarding-BeginCombat] = $RETURN "N";
+[Guarding-CanGuard] = $VAR rangeWpn;
+-rangeWpn = $GET_ITEM_SA($GET_CHAR_Ready($CombatantContext(), "WEAPON",0),"itemCombatAim");
+-$IF (rangeWpn != "-?-?-"){$RETURN "N";};
+-$IF($GET_HOOK_PARAM(5) ==# 2){$RETURN "Y";};
+[Guarding-CanGuardAttack] = $VAR par5;
+-par5 = $GET_HOOK_PARAM(5);
+-$IF ($GetCombatantState($AttackerContext()) != "ICS_Guarding"){$RETURN "N";};
+-$IF (par5 ># 0){$RETURN "Y";};
+[Guarding-Guard] = $RETURN;
+[Guarding-StartOfRound] = $VAR par5;
+-$VAR par6;
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-$IF (par5 ==# 3){$SET_HOOK_PARAM(6,"G");};
+[IsCombatReady] = $RETURN;
+[OnStartCombat] = $VAR name;
+-$VAR name1;
+-$VAR me;
+-$VAR lvl;
+-$VAR controlNPC;
+-$VAR idx1;
+-$VAR idx4;
+-$VAR modCha;
+-me = $IndexOf($CharacterContext());
+-name = $GET_CHAR_NAME(me);
+-idx1 = $NextCreatureIndex("", 1);
+-idx4 = $NextCreatureIndex("", 4);
+-$SET_COMBATANT_SA($CharacterContext(  ),"turnUndead","");
+-$IF ($NextCreatureIndex(me -# 1, 4) == me)
+-	{
+-		$SET_COMBATANT_SA($CharacterContext(),"side",1);
+-		$SET_CHAR_ASL(me,"side",1);
+-	}
+-$ELSE
+-	{
+-		$SET_COMBATANT_SA($CharacterContext(),"side",2);
+-		$SET_CHAR_ASL(me,"side",2);
+-	};
+-name1 = $GET_CHAR_NAME(idx1);
+-$IF (name != name1 && $GET_MONSTERTYPE_SA(name1,"range") != "-?-?-")
+-	{
+-		$SET_CHARACTER_SA($CharacterContext(),"range" + name1,1);
+-	};
+-$RUN_CHAR_SCRIPTS(me,"spawn");
+-$IF ($GetCombatRound() ># 0) {$SET_COMBATANT_SA($CharacterContext(),"Summoned","spell");};
+-// Paladin Leadership
+-controlNPC = 0;
+-$SET_COMBATANT_SA($CharacterContext(),"endControl", 1);
+-lvl = $GET_CHAR_Lvl(me,"paladin");
+-$IF ($InParty($CharacterContext()) != "" && lvl ># 0)
+-	{
+-		modCha = ($GET_CHAR_LIMITED_CHA(me) -# 13) *# 5;
+-		$IF (lvl >=# 3){controlNPC = modCha +# 79;};
+-		$IF (lvl ==# 2){controlNPC = modCha +# 39;}
+-		$ELSE{controlNPC = modCha +# 19;};
+-		$SET_PARTY_ASL("controlNPC",controlNPC);
+-	};
+-$IF ($GET_COMBATANT_SA($CharacterContext(),"side") == 1 && $RANDOM(100) <# $GET_PARTY_ASL("controlNPC"))
+-	{
+-		$SET_COMBATANT_SA($CharacterContext(),"playerControl","CP");
+-	};
+[OnStep] = $VAR me;
+-$VAR it;
+-me = $IndexOf($CombatantContext());
+-it = $NextCreatureIndex("", 1);
+-$IF (it != me)
+-	{
+-		$SET_HOOK_PARAM(5, it);
+-		$SET_HOOK_PARAM(6, me);
+-		$RUN_CHAR_SCRIPTS(it,"CheckProximity");
+-		$RUN_CHAR_SCRIPTS(me,"CheckProximity");
+-	};
+\(END)
+
+\(BEGIN)
+name = DamageMagical
+[DoesSpellAttackSucceed] = $VAR atk; // attacker
+-$VAR tgt; // target
+-$VAR targetMR;
+-$VAR caster;
+-$VAR caster1;
+-$VAR caster2;
+-$VAR level;
+-$VAR base;
+-atk = $IndexOf($AttackerContext());
+-tgt = $IndexOf($TargetContext());
+-targetMR = $GET_CHAR_MAGICRESIST(tgt);
+-$IF (targetMR ==# 0) {$RETURN;};
+-caster = $SA_SPELL_GET("casterLevel");
+-caster1 = $DelimitedStringSubstring(caster,0);
+-caster2 = $DelimitedStringSubstring(caster,1);
+-$IF (caster1 == "monster")
+-	{
+-		level =  $GET_MONSTERTYPE_SA($GET_CHAR_NAME(atk),"monsterLevel");
+-		base = 11;
+-	}
+-$ELSE
+-	{
+-		$IF (caster1 == "item") {level = caster2; base = 11;}
+-		$ELSE {level = $GET_CHAR_Lvl(atk,caster1); base = caster2;};
+-	};
+-$IF ($RANDOM(100) <# targetMR -# 5 *# (level -# base -# 11))
+-	{
+-		$SET_HOOK_PARAM( 5, $GET_CHAR_NAME(tgt) +" is unaffected" );
+-		$RETURN "N";
+-	};
+Parameters = "acid, charm, cold, electricity, fear, fire, mind, paralysis, petrification, poison, spell";
+\(END)
+
+\(BEGIN)
+name = DamageNonMagical
+Parameters = "blunt, crushing, piercing, poison, psionic, slashing, venom";
+\(END)
+
+\(BEGIN)
+name = Global_Combat
+[PartyArrangement] = $IF ($GET_HOOK_PARAM(5) == "I")
+-  {
+-    $RETURN "ABABBBbBABBBABBBBCCCbBABBBBCCCbBABBBACCCBCbBABBBCBACCCBCbBABBBCBACDCBCCCbAbAABcbbAABbAABcAbBcbbAABcAbBcbbAABdbbBcAcbbAABBCdbbBcAcbbAABBCdbACcAbBAAAAbABAAAbAAAbAbbcbBAAAbAbbcbBAAAbAAbcbbbCABAAAbAAbcbbbCABAAAbABbcbAbbbBBBBAACCBBAABBAACBBACCBBAACBBACCBBAADCBACBCCBBAAbbDCBACBCCBBAAbbDCAbCBBA";
+-  }
+-$ELSE
+-  {
+-    $RETURN "ABABBBbBABBBbBABBBCBcBbBABBBCBcBbbABBBCBDBdBcBbBABBBCBDBeBdBcBbBABBBCBDBbAbAABcbbAABcbbAABBCdccbbAABBCdccbbAABBCCDeddccbbAABBCCDeddccbbAABBCCDDEAAAAbABAAAbACABAAAbACABAAAbAbADACABAAAbAcADACABAAAbAcAdAEADACABAAAbAcAdABBBBAACCBBAACCBBAAbbDDCCBBAAbbDDCCBBAAbbccEEDDCCBBAAbbccEEDDCCBBAAbbccdd";
+-  };
+[PartyOriginEast] = $SET_HOOK_PARAM(5,"-1");
+[PartyOriginNorth] = $SET_HOOK_PARAM(5,"-1");
+[PartyOriginSouth] = $SET_HOOK_PARAM(5,"-1");
+[PartyOriginWest] = $SET_HOOK_PARAM(5,"-1");
+\(END)
+
+\(BEGIN)
+name = Global_CreateCharacter
+[PostCreateCharacter] = $VAR char;
+-char = $IndexOf($CharacterContext());
+-$SET_CHARACTER_SA($CharacterContext(), "pcSTR", $GET_CHAR_PERM_STR(char));
+-$SET_CHARACTER_SA($CharacterContext(), "pcSTRMOD", $GET_CHAR_PERM_STRMOD(char));
+-$SET_CHARACTER_SA($CharacterContext(), "pcINT", $GET_CHAR_PERM_INT(char));
+-$SET_CHARACTER_SA($CharacterContext(), "pcWIS", $GET_CHAR_PERM_WIS(char));
+-$SET_CHARACTER_SA($CharacterContext(), "pcDEX", $GET_CHAR_PERM_DEX(char));
+-$SET_CHARACTER_SA($CharacterContext(), "pcCON", $GET_CHAR_PERM_CON(char));
+-$SET_CHARACTER_SA($CharacterContext(), "pcCHA", $GET_CHAR_PERM_CHA(char));
+\(END)
+
+\(BEGIN)
+name = Global_CreateMonsterCombatant
+[CreateMonsterCombatant] = $VAR tbl;
+-$VAR levelTbl;
+-$VAR i;
+-$VAR monster;
+-$VAR level;
+-$VAR monRace;
+-tbl = "/$17$3$4$5$4$6/$15$4$5$6$4$7/$13$5$6$7$5$8/$11$7$8$9$8$10/$9$8$9$10$9$11/$7$10$11$12$12$13/$5$11$12$13$13$14/$3$13$14$15$16$16/$1$14$15$16$17$17/$0$16$17$18$20$19";
+-monster = $IndexOf($CharacterContext());
+-level = $SA_MONSTERTYPE_GET("monsterLevel");
+-$SET_CHARACTER_SA($CharacterContext(), "class_baseName", $SA_MONSTERTYPE_GET("class_baseName"));
+-$SET_CHAR_Lvl(monster,$GetHighestLevelBaseclass(monster),level);
+-i = 0;
+-$WHILE (1)
+-	{
+-		levelTbl = $DelimitedStringSubstring(tbl, i);
+-		$IF (levelTbl == "") {$RETURN;}; // Protects us from bad Special Saves
+-		$IF (level >=# $DelimitedStringSubstring(levelTbl, 0))
+-			{
+-				$SkillAdj($CharacterContext(), "Save Vs BR", "", "F", $DelimitedStringSubstring(levelTbl, 1));
+-				$SkillAdj($CharacterContext(), "Save Vs PP", "", "F", $DelimitedStringSubstring(levelTbl, 2));
+-				$SkillAdj($CharacterContext(), "Save Vs PPDM", "", "F", $DelimitedStringSubstring(levelTbl, 4));
+-				$SkillAdj($CharacterContext(), "Save Vs RSW", "", "F", $DelimitedStringSubstring(levelTbl, 3));
+-				$SkillAdj($CharacterContext(), "Save Vs SP", "", "F", $DelimitedStringSubstring(levelTbl, 5));
+-				$RETURN;
+-			};
+-		i = i +# 1;
+-	};
+\(END)
+
+\(BEGIN)
+name = Global_Display
+[CharacterViewScreen] = $VAR char; // character
+-$VAR name;
+-$VAR age;
+-$VAR sex;
+-$VAR align;
+-$VAR alignList;
+-$VAR alignName;
+-$VAR class;
+-$VAR cbnList; // class_baseName parameter
+-$VAR cbnCount; // number of baseclasses
+-$VAR cbn; // first baseclass
+-$VAR cbn2; // second baseclass
+-$VAR cbn3; // third baseclass
+-$VAR hbl; // highest baseclass level
+-$VAR hbn; // highest baseclass name
+-$VAR lvl;
+-$VAR lvl2;
+-$VAR lvl3;
+-$VAR xp;
+-$VAR xp2;
+-$VAR xp3;
+-$VAR status;
+-$VAR hp;
+-$VAR maxHp;
+-$VAR race;
+-$VAR ac;
+-$VAR acEff;
+-$VAR acAdj;
+-$VAR thac0;
+-$VAR thac0Adj;
+-$VAR str;
+-$VAR strMod;
+-$VAR int;
+-$VAR wis;
+-$VAR dex;
+-$VAR con;
+-$VAR cha;
+-$VAR dmg; // damage
+-$VAR dmgBns; // damage bonus
+-$VAR enc;	// encumbrance
+-$VAR mvmt;
+-$VAR weight;
+-$VAR height;
+-$VAR wpn;
+-$VAR shield;
+-$VAR armor;
+-$VAR sWidth; // screen width
+-char = $IndexOf($CharacterContext());
+-name = $GET_CHAR_NAME(char);
+-age = $GET_CHAR_AGE(char);
+-sex = $GET_CHAR_SEX(char);
+-align = $GET_CHAR_ALIGNMENT(char);
+-alignList = "$LAWFUL GOOD$NEUTRAL GOOD$CHAOTIC GOOD$LAWFUL NEUTRAL$TRUE NEUTRAL$CHAOTIC NEUTRAL$LAWFUL EVIL$NEUTRAL EVIL$CHAOTIC EVIL";
+-alignName = $DelimitedStringSubstring(alignList,align);		
+-class = $GET_CHAR_CLASS(char);
+-cbnList = $DAT_Class_Baseclasses(class);
+-cbnCount = $DelimitedStringCount(cbnList);
+-cbn = $DelimitedStringSubstring(cbnList,0);
+-cbn2 = $DelimitedStringSubstring(cbnList,1);
+-cbn3 = $DelimitedStringSubstring(cbnList,2);
+-hbn = $GetHighestLevelBaseclass(char);
+-hbl = $GetBaseclassLevel(char,hbn);
+-xp = $GET_CHAR_Exp(char,cbn);
+-xp2 = $GET_CHAR_Exp(char,cbn2);
+-xp3 = $GET_CHAR_Exp(char,cbn3);
+-lvl = $GetBaseclassLevel(char,cbn);
+-lvl2 = $GetBaseclassLevel(char,cbn2);
+-lvl3 = $GetBaseclassLevel(char,cbn3);
+-status = $GET_CHAR_STATUS(char);
+-hp = $GET_CHAR_HITPOINTS(char);
+-maxHp = $GET_CHAR_MAXHITPOINTS(char);
+-race = $GET_CHAR_RACE(char);
+-ac = $GET_CHAR_AC(char);
+-acEff = $GET_CHAR_EFFAC(char);
+-acAdj = $GET_CHAR_ADJAC (char);
+-thac0 = $GET_CHAR_THAC0(char);
+-thac0Adj = $GET_CHAR_ADJTHAC0(char);
+-str = $GET_CHAR_LIMITED_STR(char);
+-strMod = $GET_CHAR_LIMITED_STRMOD(char);
+-int = $GET_CHAR_LIMITED_INT(char);
+-wis = $GET_CHAR_LIMITED_WIS(char);
+-dex = $GET_CHAR_LIMITED_DEX(char);
+-con = $GET_CHAR_LIMITED_CON(char);
+-cha = $GET_CHAR_LIMITED_CHA(char);
+-dmgBns = $GET_CHAR_DAMAGEBONUS(char);
+-enc = $GET_CHAR_ENC(char);
+-mvmt = $GET_CHAR_MAXMOVE(char);
+-weight = $GET_CHAR_ASL(char,"charWeight");
+-height = $GET_CHAR_ASL(char,"charHeight");
+-$IF (weight == "")
+-	{
+-		$SET_CHAR_ASL(char,"charWeight",$DAT_Race_Weight($CharacterContext()));
+-		weight = $GET_CHAR_ASL(char,"charWeight");
+-	};
+-$IF (height == "")
+-	{
+-		$SET_CHAR_ASL(char,"charHeight",$DAT_Race_Height($CharacterContext()));
+-		height = $GET_CHAR_ASL(char,"charHeight");
+-	};
+-wpn = $GET_CHAR_Ready($CharacterContext(),"WEAPON",0);
+-shield = $GET_CHAR_Ready($CharacterContext(),"SHIELD",0);
+-armor = $GET_CHAR_Ready($CharacterContext(),"ARMOR",0);
+-sWidth = $GET_CONFIG("Screen_Width");
+-
+-$GrSet("LeftCol",20,20);
+-$GrSet("RightCol",260,20);
+-$GrSet("Skills", 450, 380);
+-$GrSet("Ability",75,0);
+-$GrSet("StatusTab",130,0);
+-$GrSet("SkillsTab", 150, 0);
+-$GrSet("EncumbTab",150,0);
+-$GrSet("TextHeight",0,20);
+-$GrSetLinefeed("TextHeight");
+-
+-$IF ($GET_CHAR_TYPE(char) != "@PC@" && $GET_CHAR_TYPE(char) != "@NPC@")
+-	{
+-		$GrMoveTo("LeftCol");
+-		$GrFormat("SL");
+-		$GrColor("YELLOW");
+-		$GrPrtLF($UpCase(name));
+-		$GrMark("Level");
+-		$GrMoveTo("RightCol");
+-		$GrColor("WHITE");
+-		$GrPrint("STATUS");
+-		$IF (status >=# 2) {$GrColor("RED"); $GrTab("StatusTab"); $GrPrtLF("DEAD");};
+-		$IF (status ==# 1) {$GrColor("ORANGE"); $GrTab("StatusTab"); $GrPrtLF("UNCONSCIOUS");};
+-		$IF (status ==# 0) {$GrColor("GREEN"); $GrTab("StatusTab"); $GrPrtLF("OKAY");};
+-		$GrColor("WHITE");
+-		$GrPrint("HIT POINTS");
+-		$IF (hp <=# 0) {$GrColor("RED"); $GrTab("StatusTab"); $GrPrint(hp);};
+-		$IF ((hp >=# 1) && (hp <# maxHp)) {$GrColor("ORANGE"); $GrTab("StatusTab"); $GrPrint(hp);};
+-		$IF (hp ==# maxHp) {$GrColor("GREEN"); $GrTab("StatusTab"); $GrPrint(hp);};
+-		$GrColor("GREEN");
+-		$GrPrtLF("/" + maxHp);
+-		$GrColor("WHITE");
+-		$GrPrtLF($UpCase(race));
+-		$GrMoveTo("Level");
+-		$GrMove("TextHeight"); 
+-		$GrMove("TextHeight"); 
+-		$GrMove("TextHeight"); 
+-		$GrMove("TextHeight"); 
+-		$GrColor("WHITE");
+-		$GrMark("Strength");
+-		$GrPrtLF(" ");
+-		$GrPrtLF("INT");
+-		$GrPrtLF(" ");
+-		$GrPrtLF(" ");
+-		$GrPrtLF(" ");
+-		$GrPrtLF(" ");
+-		$GrMark("Armor");
+-		$GrMoveTo("Strength");
+-		$GrMove("Ability");
+-		$GrColor("GREEN");
+-		$GrPrtLF(" ");
+-		$GrPrtLF(int);
+-		$GrPrtLF(" ");
+-		$GrPrtLF(" ");
+-		$GrPrtLF(" ");
+-		$GrPrtLF(" ");
+-		$GrMoveTo("Armor");
+-		$GrMove("TextHeight"); 
+-		$GrColor("WHITE");
+-		$GrPrint("ARMOR CLASS");
+-		$IF (ac !=# acEff) {$GrColor("ORANGE"); $GrTab("StatusTab"); $GrPrtLF(acEff);};
+-		$IF (ac ==# acEff) {$GrColor("GREEN"); $GrTab("StatusTab"); $GrPrtLF(ac);};
+-		$GrColor("WHITE");
+-		$GrPrint("THAC0");
+-		$IF (thac0 !=# thac0Adj) {$GrColor("ORANGE"); $GrTab("StatusTab"); $GrPrtLF(thac0Adj);};
+-		$IF (thac0 ==# thac0Adj) {$GrColor("GREEN"); $GrTab("StatusTab"); $GrPrtLF(thac0);};
+-		$RETURN;
+-	};
+-
+-$GrMoveTo("LeftCol");
+-$GrFormat("SL");
+-$GrColor("YELLOW");
+-$GrPrtLF($UpCase(name));
+-$GrColor("WHITE");
+-$GrPrint($UpCase(sex));
+-$GrTab("StatusTab");
+-$GrColor("GREEN");
+-$GrPrint(age);
+-$GrColor("WHITE");
+-$GrPrtLF(" YEARS");
+-$GrPrtLF(alignName);
+-$GrPrtLF($UpCase(class));
+-$IF (cbnCount ==# 3)
+-	{
+-		$GrPrint("LEVEL/XP " + lvl + "/" + xp);
+-		$GrPrint(" " + lvl2 + "/" + xp2);
+-		$GrPrtLF(" " + lvl3 + "/" + xp3);
+-	};
+-$IF (cbnCount ==# 2 && cbnList != "-?-?-")
+-	{
+-		$GrPrint("LEVEL/XP " + lvl + "/" + xp);
+-		$GrPrtLF(" " + lvl2 + "/" + xp2);
+-	};
+-$IF (cbnCount ==# 1)
+-	{
+-		$GrPrtLF("LEVEL/XP " + lvl + "/" + xp);
+-	};
+-$GrMark("Level");
+-
+-$GrMoveTo("RightCol");
+-$GrColor("WHITE");
+-$GrPrint("STATUS");
+-$IF (status >=# 2)
+-	{
+-		$GrColor("RED");
+-		$GrTab("StatusTab");
+-		$GrPrtLF("DEAD");
+-	};
+-$IF (status ==# 1)
+-	{
+-		$GrColor("ORANGE");
+-		$GrTab("StatusTab");
+-		$GrPrtLF("UNCONSCIOUS");
+-	};
+-$IF (status ==# 0)
+-	{
+-		$GrColor("GREEN");
+-		$GrTab("StatusTab");
+-		$GrPrtLF("OKAY");
+-	};
+-$GrColor("WHITE");
+-$GrPrint("HIT POINTS");
+-$IF (hp <=# 0)
+-	{
+-		$GrColor("RED");
+-		$GrTab("StatusTab");
+-		$GrPrint(hp);
+-	};
+-$IF ((hp >=# 1) && (hp <# maxHp))
+-	{
+-		$GrColor("ORANGE");
+-		$GrTab("StatusTab");
+-		$GrPrint(hp);
+-	};
+-$IF (hp ==# maxHp)
+-	{
+-		$GrColor("GREEN");
+-		$GrTab("StatusTab");
+-		$GrPrint(hp);
+-	};
+-$GrColor("GREEN");
+-$GrPrtLF("/" + maxHp);
+-$GrColor("WHITE");
+-$GrPrtLF($UpCase(race));
+-$GrColor("GREEN");
+-$GrPrint(weight);
+-$GrColor("WHITE");
+-$GrPrint(" LBS");
+-$GrColor("GREEN");
+-$GrTab("StatusTab");
+-$GrPrint(height /# 12);
+-$GrColor("WHITE");
+-$GrPrint("'");
+-$GrColor("GREEN");
+-$GrPrint(height %# 12);
+-$GrColor("WHITE");
+-$GrPrtLF("\"");
+-$GrMoveTo("Level");
+-$GrMove("TextHeight"); 
+-$GrColor("WHITE");
+-$GrMark("Strength");
+-$GrPrtLF("STR");
+-$GrPrtLF("INT");
+-$GrPrtLF("WIS");
+-$GrPrtLF("DEX");
+-$GrPrtLF("CON");
+-$GrPrtLF("CHA");
+-$GrMark("Armor");
+-$GrMoveTo("Strength");
+-$GrMove("Ability");
+-$GrColor("GREEN");
+-$IF (strMod >=# 1){$GrPrtLF(str + "(" + strMod + ")");}
+-$ELSE{$GrPrtLF(str);};
+-$GrPrtLF(int);
+-$GrPrtLF(wis);
+-$GrPrtLF(dex);
+-$GrPrtLF(con);
+-$GrPrtLF(cha);
+-
+-$GrMoveTo("Armor");
+-$GrMove("TextHeight"); 
+-$GrColor("WHITE");
+-$GrPrint("ARMOR CLASS");
+-$IF (ac !=# acEff)
+-	{
+-		$GrColor("ORANGE");
+-		$GrTab("StatusTab");
+-		$GrPrtLF(acEff);
+-	}
+-$ELSE
+-	{
+-		$GrColor("GREEN");
+-		$GrTab("StatusTab");
+-		$GrPrtLF(ac);
+-	};
+-$GrColor("WHITE");
+-$GrPrint("THAC0");
+-$IF (thac0 !=# thac0Adj)
+-	{
+-		$GrColor("ORANGE");
+-		$GrTab("StatusTab");
+-		$GrPrtLF(thac0Adj);
+-	}
+-$ELSE
+-	{
+-		$GrColor("GREEN");
+-		$GrTab("StatusTab");
+-		$GrPrtLF(thac0);
+-	};
+-$GrColor("WHITE");
+-$GrPrint("DAMAGE");
+-$GrColor("GREEN");
+-$GrTab("StatusTab");
+-$IF (dmgBns ># 0){$GrPrtLF("1D2+" + dmgBns);}
+-$ELSE {$GrPrtLF("1D2");};
+-$GrColor("WHITE");
+-$GrMove("TextHeight"); 
+-
+-$IF ((wpn == "") && (shield == "") && (armor == "")){$GrPrtLF("NONE");};
+-$IF (wpn != ""){$GrPrtLF($UpCase($DAT_Item_IDName(wpn)));};
+-$IF (shield != ""){$GrPrtLF($UpCase($DAT_Item_IDName(shield)));};
+-$IF (armor != ""){$GrPrtLF($UpCase($DAT_Item_IDName(armor)));};
+-$GrSet("Encumbrance", "RightCol", "Armor");
+-$GrMoveTo("Encumbrance");
+-$GrMove("TextHeight");
+-$GrColor("WHITE");
+-$GrPrint("ENCUMBRANCE");
+-$GrColor("GREEN");
+-$GrTab("EncumbTab");
+-$GrPrtLF(enc);
+-$GrColor("WHITE");
+-$GrPrint("MOVEMENT");
+-$GrColor("GREEN");
+-$GrTab("EncumbTab");
+-$GrPrtLF(mvmt);
+-
+-$IF (class == "Assassin" || class == "Thief")
+-	{
+-		$GrMoveTo("Skills");
+-		$GrColor("WHITE");
+-		$GrPrtLF("SKILLS");
+-		$GrMark("Pick");
+-		$GrPrtLF("Pick Pockets");
+-		$GrPrtLF("Open Locks");
+-		$GrPrtLF("Find Traps");
+-		$GrPrtLF("Move Silently");
+-		$GrPrtLF("Hide in Shadows");
+-		$GrPrtLF("Hear Noise");
+-		$GrPrtLF("Climb Walls");
+-		$GrPrtLF("Read Languages");
+-		$GrMoveTo("Pick");
+-		$GrMove("SkillsTab");
+-		$GrColor("GREEN");
+-		$GrPrtLF($SkillAdj($CharacterContext(),"PickPockets","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"OpenLocks","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"FindTraps","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"MoveSilent","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"HideInShadows","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"HearNoise","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"ClimbWalls","","F",""));
+-		$GrPrtLF($SkillAdj($CharacterContext(),"ReadLanguages","","F",""));
+-	};
+\(END)
+
+\(BEGIN)
+name = Global_Transfer
+[EachPartyMember] = $ForEachPossession($CharacterContext(), "item_DrowEquipment");
+-$RETURN "1";
+[TransferModule] = $ForEachPartyMember("Global_Transfer", "EachPartyMember");
+-$IF ($GET_HOOK_PARAM(5) ==# "1")
+-	{
+-		$SET_HOOK_PARAM(6,"Your drow equipment dissolves.");
+-	};
+-$RETURN;
+\(END)
+
+\(BEGIN)
+name = IsWarderCloaked
+[DoesAttackSucceed] = $VAR par5;
+-$VAR par6;
+-$VAR cloaked;
+-$VAR miss;
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-cloaked = $GET_CHARACTER_SA($TargetContext(),"IsWarderCloaked")
+-miss = $GET_COMBATANT_SA($TargetContext(),"displaceMiss");
+-$IF (cloaked != "-?-?-" && miss == "-?-?-")
+-	{
+-		$SET_COMBATANT_SA($TargetContext(),"displaceMiss",1);
+-		$SET_HOOK_PARAM(6,par6 +# 90);
+-	};
+-$IF (par5 >=# (par6 +# 4)){$RETURN "Y";}
+-$ELSE {$RETURN "N";};
+[SaveVsBW_Save] = $RETURN $GET_HOOK_PARAM(0) -# 2;
+[SaveVsRSW_Save] = $RETURN $GET_HOOK_PARAM(0) -# 2;
+[SaveVsPP_Save] = $RETURN $GET_HOOK_PARAM(0) -# 2;
+[SaveVsPPDM_Save] = $RETURN $GET_HOOK_PARAM(0) -# 2;
+[SaveVsSp_Save] = $RETURN $GET_HOOK_PARAM(0) -# 2;
+\(END)
+
+\(BEGIN)
+name = itemAntidote
+[InvokeSpellOnTarget] = $VAR tgt;
+-tgt = $IndexOf($TargetContext());
+-$IF ($GET_CHARACTER_SA($TargetContext(), "IsPoisoned") == "-?-?-"){$RETURN;};
+-$DELETE_CHARACTER_SA($CharacterContext(),"IsPoisoned");
+-$IF ($GET_CHAR_HITPOINTS(tgt) <=# 0)
+-	{
+-		$SET_CHAR_HITPOINTS(tgt, "1");
+-		$SET_CHAR_STATUS(tgt, "0");
+-	};
+\(END)
+
+\(BEGIN)
+name = itemCombatAim
+[CanAim] = $VAR p5;
+-$IF ($GET_HOOK_PARAM(6))
+-	{
+-		p5 = $GET_HOOK_PARAM(5);
+-		$IF(p5 == "Bow" || p5 ==  "Crossbow" || p5 ==  "Sling (no ammo needed)"){$RETURN "N";};
+-	};
+\(END)
+
+\(BEGIN)
+name = itemHurledWeapon
+[ComputeDamage] = $VAR par0;
+-$VAR par5;
+-$VAR dmg;
+-$VAR atk; // attacker
+-$VAR tgt; // target
+-par0 = $GET_HOOK_PARAM(0);
+-par5 = $GET_HOOK_PARAM(5);
+-dmg = par0;
+-$IF (dmg == ""){dmg = par5;};
+-atk = $IndexOf($AttackerContext());
+-tgt = $IndexOf($TargetContext());
+-$IF ($VisualDistance(atk,tgt) <# 2)
+-  {
+-    dmg = dmg +# $GET_CHAR_DAMAGEBONUS(atk);
+-  };
+-$RETURN dmg;
+[DoesAttackSucceed] = $VAR atk; // attacker
+-$VAR par5; // Hook parameter 5
+-$VAR par6; // Hook parameter 6
+-$VAR bonus; // hit bonus
+-atk = $IndexOf($AttackerContext());
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-bonus = $GET_CHAR_HITBONUS(atk);
+-$IF ($VisualDistance(atk,$IndexOf($TargetContext())) <# 2)
+-  {$SET_HOOK_PARAM(6,par6 +# bonus);};
+-$IF (par5 >=# par6){$RETURN "Y";}
+-$ELSE {$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = itemMagicalWeapon 
+[ComputeDamage] = $VAR wpn;
+-$VAR adj;
+-wpn = $GET_CHAR_Ready($AttackerContext(), "WEAPON", 0);
+-$IF ($GET_ITEM_SA(wpn,"item_FineWeapon") != "-?-?-")
+-  {adj = $GET_CHAR_DAMAGEBONUS($IndexOf($AttackerContext()));};
+-$SET_HOOK_PARAM(5,$GET_HOOK_PARAM(5) +# adj);
+[DoesAttackSucceed] = $VAR atk; // attacker
+-$VAR adj;
+-$VAR list;
+-$VAR wpn;
+-atk = $IndexOf($AttackerContext());
+-list = "$-3$-3$-3$-3$-2$-1$0$0$0$0$0$0$0$0$0$0$1$2$3$3$3$4$4$4$5$5";
+-adj = $DelimitedStringSubstring(list,$GET_CHAR_DEX(atk));
+-wpn = $GET_CHAR_Ready($AttackerContext(), "WEAPON", 0);
+-$IF ($GET_ITEM_SA(wpn,"item_FineWeapon") != "-?-?-")
+-  {adj = adj +# $GET_CHAR_HITBONUS(atk);};
+-$SET_HOOK_PARAM(6, $GET_HOOK_PARAM(6) -# adj);
+-$IF ($GET_HOOK_PARAM(5) >=# $GET_HOOK_PARAM(6)){$RETURN "Y";}
+-$ELSE {$RETURN "N";};
+Parameters = "1 - arrow, 2 - bolt, 3 - dart, 4 - javelin/spear, 5 - other";
+\(END)
+
+\(BEGIN)
+name = itemMissileWeapon
+Parameters = "1 - arrow, 2 - bolt, 3 - dart, 4 - javelin/spear, 5 - other";
+[ComputeDamage] = $VAR wpn;
+-$VAR adj;
+-wpn = $GET_CHAR_Ready($AttackerContext(), "WEAPON", 0);
+-$IF ($GET_ITEM_SA(wpn,"item_FineWeapon") != "-?-?-")
+- {adj = $GET_CHAR_DAMAGEBONUS($IndexOf($AttackerContext()));};
+-$SET_HOOK_PARAM(5,$GET_HOOK_PARAM(5) +# adj);
+[DoesAttackSucceed] = $VAR atk; // attacker
+-$VAR adj;
+-$VAR list;
+-$VAR wpn;
+-atk = $IndexOf($AttackerContext());
+-list = "$-3$-3$-3$-3$-2$-1$0$0$0$0$0$0$0$0$0$0$1$2$3$3$3$4$4$4$5$5";
+-adj = $DelimitedStringSubstring(list,$GET_CHAR_DEX(atk));
+-wpn = $GET_CHAR_Ready($AttackerContext(), "WEAPON", 0);
+-$IF ($GET_ITEM_SA(wpn,"item_FineWeapon") != "-?-?-"){adj = adj +# $GET_CHAR_HITBONUS(atk);};
+-$SET_HOOK_PARAM(6, $GET_HOOK_PARAM(6) -# adj);
+-$IF ($GET_HOOK_PARAM(5) >=# $GET_HOOK_PARAM(6)){$RETURN "Y";};
+\(END)
+
+\(BEGIN)
+name = itemPoison
+DoesAttackSucceed = $VAR tgt; // target
+-$VAR time;
+-$VAR par5; // Hook parameter 5
+-$VAR par6; // Hook parameter 6
+-tgt = $IndexOf($TargetContext());
+-time = $GET_PARTY_TIME();
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-$IF ($SA_CHARACTER_GET("IsImmunePoison") != "-?-?-"){$RETURN;};
+-$IF ($SA_CHARACTER_GET("IsProtectedPoisonCaster") != "-?-?-"){$RETURN;};
+-$IF ($SA_CHARACTER_GET("IsProtectedPoisonTarget") != "-?-?-"){$RETURN;};
+-$IF (par5 ># par6)
+-	{
+-		$SET_CHARACTER_SA($TargetContext(),"IsPoisoned",time);
+-		$SET_CHAR_STATUS(tgt,2);
+-		$SET_CHAR_HITPOINTS(tgt,"-11");
+-	};
+\(END)
+
+\(BEGIN)
+name = itemRingOfWizardry
+[OnReady] = $VAR lvl;
+-lvl = $SA_PARAM_GET();
+-$SpellAdj($CharacterContext(),"Magic User","ring",lvl,lvl,200,0);
+-$SET_CHARACTER_SA($CharacterContext(),"IsRingWizardry", lvl);
+[OnUnReady] = $VAR lvl;
+-lvl = $SA_PARAM_GET();
+-$SpellAdj($CharacterContext(),"Magic User","ring",lvl,lvl,50,0);
+-$DELETE_CHARACTER_SA($CharacterContext(),"IsRingWizardry");
+\(END)
+
+\(BEGIN)
+name = itemSlot_Fingers
+[CanReady] = $IF ($GET_HOOK_PARAM( 5 ) <# 2){$RETURN "Y";}
+-$ELSE {$SET_HOOK_PARAM(6, "Sorry, you can't do that.");$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = itemSlot_Pack
+[CanReady] = $RETURN "Y";
+\(END)
+
+\(BEGIN)
+name = itemWarderCloak
+[OnReady] = $SET_CHARACTER_SA($CharacterContext(),"IsWarderCloaked",1);
+[OnUnReady] = $DELETE_CHARACTER_SA($CharacterContext(),"IsWarderCloaked");
+-$DELETE_COMBATANT_SA($CombatantContext(),"displaceMiss");
+\(END)
+
+\(BEGIN)
+name = itemWeaponType
+Parameters = "blunt, piercing, slashing, piercing/slashing";
+\(END)
+
+\(BEGIN)
+name = itemWhip
+\(END)
+
+\(BEGIN)
+name = monsterBearHug1
+[InvokeSpellOnTarget] = $SET_COMBATANT_SA($AttackerContext(),"CombatRoundStart",1);
+\(END)
+
+\(BEGIN)
+name = monsterBearHug2
+[InvokeSpellOnTarget] = $VAR atk; // attacker
+-$VAR tgt; // target
+-atk = $IndexOf($AttackerContext());
+-tgt = $IndexOf($TargetContext());
+-$IF ($GET_COMBATANT_SA($AttackerContext(),"CombatRoundStart") ==# 1)
+-	{
+-		$IF ($GET_CHARACTER_SA($TargetContext(),"IsHugged") == "-?-?-")
+-			{
+-				$SET_COMBATANT_SA($AttackerContext(),"HugLink",tgt);
+-				$SET_COMBATANT_SA($AttackerContext(),"monster_BearHugging",tgt);
+-				$SET_COMBATANT_SA($TargetContext(),"monster_BearHugged",atk);
+-				$SET_COMBATANT_SA($TargetContext(),"HugLink",atk);
+-				$SET_CHARACTER_SA($TargetContext(),"IsHugged",1);
+-			};
+-	};
+\(END)
+
+\(BEGIN)
+name = monsterBearHugged
+[CharDisplayStatus] = $SET_HOOK_PARAM( 7,"Hugged by Bear");
+-$SET_HOOK_PARAM( 6,"");
+-$RETURN 1;
+[OnStartCombatantAction] = $VAR atk;
+-atk = $SA_PARAM_GET();
+-$IF ($GET_CHAR_HITPOINTS(atk) <# 1)
+-	{
+-		$DELETE_COMBATANT_SA($CombatantContext(),"HugLink");
+-		$DELETE_CHARACTER_SA($CombatantContext(),"IsHugged");
+-		$SA_REMOVE();
+-	};
+\(END)
+
+\(BEGIN)
+name = monsterBearHugging
+[CharDisplayStatus] = $SET_HOOK_PARAM( 7,"Hugging");
+[CharDisplayStatus] = $SET_HOOK_PARAM( 7,"Hugging");
+-$SET_HOOK_PARAM( 6,"");
+-$RETURN 1;
+[GetAdjMaxMovement] = $RETURN 0;
+[GetNumberOfAttacks] = $RETURN 0;
+[OnStartCombatantAction] = $VAR Tgt;
+-$VAR name;
+-$VAR dmg;
+-Tgt = $SA_PARAM_GET();
+-$IF ($GET_CHAR_HITPOINTS(Tgt) ># 0)
+-	{
+-		name = $GET_CHAR_NAME($IndexOf($CombatantContext()));
+-		$IF (name == "Black Bear"){dmg = ($RANDOM(4) +# $RANDOM(4) +# 2);};
+-		$IF (name == "Brown Bear"||name == "Grizzly Bear"){dmg = ($RANDOM(6) +# $RANDOM(6) +# 2);};
+-		$IF (name == "Cave Bear"){dmg = ($RANDOM(8) +# $RANDOM(8) +# 2);};
+-		$IF (name == "Northern Bear"){dmg = ($RANDOM(6) +# $RANDOM(6) +# $RANDOM(6) +# 3);};
+-		$SET_CHAR_HITPOINTS(Tgt,$GET_CHAR_HITPOINTS(Tgt) -# dmg);
+-	};
+-$IF ($GET_CHAR_HITPOINTS(Tgt) <# 1)
+-	{
+-		$IF ($GET_CHAR_HITPOINTS(Tgt) <# "-9"){$SET_CHAR_STATUS(Tgt,2);}
+-		$ELSE {$SET_CHAR_STATUS(Tgt,9);};
+-		$DELETE_COMBATANT_SA($CombatantContext(),"monster_BearHugging");
+-	};
+\(END)
+
+\(BEGIN)
+name = monsterCombatantAlignment
+[CreateMonsterCombatant] = $VAR param;
+-$VAR char;
+-param = $SA_PARAM_GET();
+-char = $IndexOf($CharacterContext());
+-$IF (param == "good"){$SET_CHAR_ALIGNMENT(char,1);};
+-$IF (param == "neutral"){$SET_CHAR_ALIGNMENT(char,4);};
+-$IF (param == "evil"){$SET_CHAR_ALIGNMENT(char,7);};
+\(END)
+
+\(BEGIN)
+name = monsterImmuneFear
+\(END)
+
+\(BEGIN)
+name = monsterImmuneHold
+\(END)
+
+\(BEGIN)
+name = monsterImmunePoison
+[InvokeSpellOnTarget] = $SET_CHARACTER_SA($CharacterContext(),"IsImmunePoison","");
+\(END)
+
+\(BEGIN)
+name = monsterImmuneSleep
+\(END)
+
+\(BEGIN)
+name = monsterPlayerControl
+[AutoAction] = $RETURN "CP";
+\(END)
+
+\(BEGIN)
+name = monsterPoison
+[InvokeSpellOnTarget] = $VAR time;
+-$VAR tgt; // target
+-time = $GET_PARTY_TIME();
+-tgt = $IndexOf($TargetContext());
+-$IF ($SA_CHARACTER_GET("IsImmunePoison") != "-?-?-"){$RETURN;};
+-$IF ($SA_CHARACTER_GET("IsProtectedPoisonCaster") != "-?-?-"){$RETURN;};
+-$IF ($SA_CHARACTER_GET("IsProtectedPoisonTarget") != "-?-?-"){$RETURN;};
+-$SET_CHARACTER_SA($TargetContext(),"IsPoisoned",time);
+-$SET_CHAR_STATUS(tgt,2);
+-$SET_CHAR_HITPOINTS(tgt,"-11");
+\(END)
+
+\(BEGIN)
+name = monsterRearClawRake1
+[InvokeSpellOnTarget] = $SET_COMBATANT_SA($AttackerContext(),"CombatRoundStart",1);
+\(END)
+
+\(BEGIN)
+name = monsterRearClawRake2
+[InvokeSpellOnTarget] = $VAR atk; // attacker
+-$VAR tgt; // target
+-$VAR HP; // hit points
+-$VAR name;
+-$VAR dmg;
+-$VAR i;
+-$VAR AC;
+-$VAR TH;
+-atk = $IndexOf($AttackerContext());
+-tgt = $IndexOf($TargetContext());
+-HP = $GET_CHAR_HITPOINTS(tgt);
+-$IF (HP <# 1) {$RETURN;};
+-$IF ($GET_COMBATANT_SA($AttackerContext(),"CombatRoundStart") ==# 1)
+-	{
+- 		i = 0;
+-		AC = $GET_CHAR_AC(tgt);
+-		TH = $GET_CHAR_THAC0(atk);
+-		$WHILE (i <# 2)
+-			{
+-				$IF($RANDOM(20) +# 1 >=# TH -# AC)
+-					{
+-						name = $GET_CHAR_NAME(atk);
+-						$IF (name == "Giant Lynx"){dmg = ($RANDOM(3) +# 1);};
+-						$IF (name == "Leopard"||name == "Mountain Lion"){dmg = ($RANDOM(4) +# 1);};
+-						$IF (name == "Jaguar"||name == "Weretiger"){dmg = ($RANDOM(4) +# 2);};
+-						$IF (name == "Lion"){dmg = ($RANDOM(6) +# 2);};
+-						$IF (name == "Spotted Lion"||name == "Tiger"||name == "Sabre-tooth Tiger"){dmg = ($RANDOM(4) +# $RANDOM(4) +# 2);};
+-						$SET_CHAR_HITPOINTS(tgt,HP -# dmg);
+-					};
+-				i = i +# 1;
+-			};
+-		$IF (HP<# 1)
+-			{
+-				$IF (HP <# "-9"){$SET_CHAR_STATUS(Tgt,2);}
+-				$ELSE{$SET_CHAR_STATUS(tgt,9);};
+-			};
+-	};
+\(END)
+
+\(BEGIN)
+name = monsterRegeneration
+[StartCombatRound] = $SET_CHAR_HITPOINTS($IndexOf($CharacterContext()), ($GET_CHAR_HITPOINTS($IndexOf($CharacterContext())) +# $SA_PARAM_GET()));
+\(END)
+
+\(BEGIN)
+name = monsterWeaponImmunity
+[DoesAttackSucceed] = $VAR atk; // attacker
+-$VAR item;
+-$VAR mlev;
+-$VAR list;
+-$VAR name;
+-$VAR par5; // Hook parameter 5
+-$VAR par6; // Hook parameter 6
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-name = $GET_CHAR_NAME($IndexOf($TargetContext()));
+-$IF ($GET_MONSTERTYPE_SA(name,"monster_WeaponImmunity") != "-?-?-")
+-	{
+-		atk = $IndexOf($AttackerContext());
+-		item = $SA_ITEM_GET("item_MagicalWeapon");
+-		$IF ($SA_ITEM_GET("AdjustBonus") != "-?-?-"){item = $GET_HOOK_PARAM(7);};
+-		$IF ($GET_MONSTERTYPE_SA(name,"vulnSilver") != "-?-?-" && $SA_ITEM_GET("item_SilverWeapon") != "-?-?-")
+-			{item = 5;};
+- 		$IF (item == "-?-?-")
+-			{
+-				mlev = $GET_MONSTERTYPE_SA($GET_CHAR_NAME(atk),"monsterLevel");
+-				$IF (mlev != "-?-?-")
+-					{
+-						list = "$0$0$0$0$0$1$1$2$2$3$3";
+-						$IF (mlev <# 11)
+-							{item = $DelimitedStringSubstring(list,mlev);}
+-						$ELSE {item = 4;};
+- 					};
+-			};
+-		$IF (item <# $SA_PARAM_GET()){$SET_HOOK_PARAM(6,par6 +# 90);};
+-	};
+-$IF (par5 >=# par6){$RETURN "Y";}
+-$ELSE {$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = monsterWeaponImmunityType
+[DoesAttackSucceed] = $IF ($GET_MONSTERTYPE_SA($GET_CHAR_NAME($IndexOf($TargetContext())),$SA_NAME()) != "-?-?-" && $SA_ITEM_GET("item_WeaponType") ==# $SA_PARAM_GET())
+-	{$SET_HOOK_PARAM(6,$GET_HOOK_PARAM(6) +# 90);};
+-$IF ($GET_HOOK_PARAM(5) >=# $GET_HOOK_PARAM(6)){$RETURN "Y";}
+-$ELSE {$RETURN "N";};
+\(END)
+
+\(BEGIN)
+name = monsterWeaponResistance
+[CreateMonsterCombatant] = $SET_COMBATANT_SA($CharacterContext(),"monster_WeaponResistance",$SA_PARAM_GET());
+[ComputeDamage] = $VAR item;
+-item = $SA_ITEM_GET("item_MagicalWeapon");
+-$IF ($GET_CHAR_TYPE($IndexOf($AttackerContext())) ==# 3){$RETURN;};
+-$IF (item == "-?-?-")
+-	{
+-		$IF (item <# $SA_PARAM_GET()){$RETURN $GET_HOOK_PARAM(5) /# 2;};
+-	};
+\(END)
+
+\(BEGIN)
+name = monsterWeaponResistanceType
+[CreateMonsterCombatant] = $SET_COMBATANT_SA($CharacterContext(),"monster_WeaponResistanceType",$SA_PARAM_GET());
+[ComputeDamage] = $VAR weapon;
+-weapon = $SA_ITEM_GET("item_WeaponType");
+-$IF (weapon == $SA_PARAM_GET()){$RETURN $GET_HOOK_PARAM(5) /# 2;};
+\(END)
+
+\(BEGIN)
+name = raceSuppress
+[SelectCharacterRace] = $RETURN "Y";
+\(END)
+
+\(BEGIN)
+name = SaveAdjPPDM
+[SaveVsPPDM_Save] = $VAR adj;
+-adj = $SA_PARAM_GET();
+-$SA_REMOVE();
+-$RETURN $GET_HOOK_PARAM(0) +# adj;
+\(END)
+
+\(BEGIN)
+name = SaveAdjSpell
+[SaveVsSp_Save] = $VAR adj;
+-adj = $SA_PARAM_GET();
+-$SA_REMOVE();
+-$RETURN $GET_HOOK_PARAM(0) +# adj;
+\(END)
+
+\(BEGIN)
+name = spellAttack
+[InvokeSpellOnTarget] = $IF ($GET_COMBATANT_SA($AttackerContext(),"IsInvisible"))
+-  {
+-   $DELETE_CHARACTER_SA($AttackerContext(),"IsInvisibleSpell");
+-   $DELETE_CHARACTER_SA($AttackerContext(),"IsInvisiblePotion");
+-   $DELETE_COMBATANT_SA($AttackerContext(),"IsInvisible");
+-  };
+\(END)
+
+\(BEGIN)
+name = StandardDisplaySpellEffect
+[CharDisplayStatus] = $SET_HOOK_PARAM( 7, $SA_PARAM_GET());
+-$SET_HOOK_PARAM( 6, "");
+-$RETURN 1;
+[Dispel] = $SA_REMOVE();
+-$RUN_CHAR_SE_SCRIPTS($TargetContext(),"Dispel SE");
+[Dispel SE] = $REMOVE_SPELL_EFFECT($CharacterContext(),$GET_HOOK_PARAM(5));
+\(END)
+
+\(BEGIN)
+name = TeleporterDestinations
+[/1/0/0] = $RETURN $GET_PARTY_ASL("spot");
+\(END)
+
+\(BEGIN)
+name = Turn$SYS$
+<Skeleton> = 1100112
+-1070112
+-1040112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+<Zombie> = 1130112
+-1100112
+-1070112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010112
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+<Ghoul> = 1160112
+-1130112
+-1100112
+-1040112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+<Shadow> = 1190112
+-1160112
+-1160112
+-1070112
+-1040112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+-2010712
+<Wight> = 1200112
+-1190112
+-1160112
+-1100112
+-1070112
+-1040112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+<Ghast> = 1210112
+-1200112
+-1190112
+-1130112
+-1100112
+-1070112
+-1040112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+<Wraith> = 1210112
+-1210112
+-1200112
+-1160112
+-1130112
+-1100112
+-1070112
+-1040112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+-2010112
+<Mummy> = 1210112
+-1210112
+-1210112
+-1200112
+-1160112
+-1130112
+-1100112
+-1070112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+<Spectre> = 1210112
+-1210112
+-1210112
+-1210112
+-1200112
+-1160112
+-1130112
+-1100112
+-1070112
+-1070112
+-1070112
+-1070112
+-1070112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+-1010112
+<Vampire> = 1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1200112
+-1160112
+-1130112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+-1040112
+<Ghost> = 1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1200112
+-1160112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+<Lich> = 1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1190112
+-1160112
+-1160112
+-1160112
+-1160112
+-1160112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+-1100112
+<Special> = 1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1210112
+-1200112
+-1190112
+-1190112
+-1190112
+-1190112
+-1190112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+-1130112
+\(END)
+
+\(BEGIN)
+name = turnUndead
+[CanTurn] = $VAR par5;
+-$VAR com;
+-$VAR clrc;
+-$VAR pldn;
+-par5 = $GET_HOOK_PARAM(5);
+-com = $IndexOf($CombatantContext());
+-clrc = $GET_CHAR_Lvl(com,"cleric");
+-pldn = $GET_CHAR_Lvl(com,"paladin");
+-$IF (clrc ># 0 || pldn ># 2){$RETURN par5;}; // turning undead table - DMG 25
+[TurnAttempt] = $VAR par5;
+-$VAR par6;
+-$VAR num;
+-$VAR turn;
+-par5 = $GET_HOOK_PARAM(5);
+-par6 = $GET_HOOK_PARAM(6);
+-num = $DelimitedStringCount(par5);
+-turn = $DelimitedStringSubstring(par5,num);
+-$RETURN par5;
+\(END)
+
+\(BEGIN)
+name = $$Help
+Date = "June 22, 2014";
+ToDo1 = "Wheel-of-Time-ize SAs (like turning undead)";
+ToDo2 = "fill in baseclass/class SAs";
+ToDo3 = "fill in spell SAs";
+\(END)
+

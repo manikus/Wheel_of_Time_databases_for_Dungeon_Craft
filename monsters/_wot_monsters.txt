@@ -1,0 +1,783 @@
+// Monster database file
+
+\(BEGIN)
+name = Brown Bear
+icon file = icon_BrownBear.png,0,2,48,48,0,1,2
+miss sound = sound_Miss.wav
+hit sound = sound_Hit.wav
+move sound = sound_MonsterMoveStep.wav
+death sound = sound_MonsterDeathMedium.wav
+intelligence = 3
+armor class = 6
+movement rate = 12
+hit dice = 5.000000
+treat HD as hit points = yes
+hit dice bonus = 5
+THAC0 = 15
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 425
+Special Ability = monsterLevel,6
+Class = Fighter
+Race = Mammal
+form = mammal + animal + none
+penalty = none
+immunity = none
+Misc Options = can be held/charmed + none
+item = none
+attack = 6,1,0,attacks,monsterBearHug1
+attack = 6,1,0,attacks,monsterBearHug2
+attack = 8,1,0,bites,
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Cave Bear
+icon file = icon_CaveBear.png,0,2,48,48,0,1,2
+miss sound = sound_Miss.wav
+hit sound = sound_Hit.wav
+move sound = sound_MonsterMoveStep.wav
+death sound = sound_MonsterDeathMedium.wav
+intelligence = 3
+armor class = 6
+movement rate = 12
+hit dice = 5.000000
+treat HD as hit points = yes
+hit dice bonus = 5
+THAC0 = 14
+magic resistance = 0
+size = large
+morale = 45
+experience point value = 425
+Special Ability = monsterLevel,7
+Class = Fighter
+Race = Mammal
+form = mammal + animal + none
+penalty = none
+immunity = none
+Misc Options = can be held/charmed + none
+item = none
+attack = 6,1,0,attacks,monsterBearHug1
+attack = 6,1,0,attacks,monsterBearHug2
+attack = 8,1,0,bites,
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Corlm
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 3
+armor class = 5
+movement rate = 12
+hit dice = 3.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 17
+magic resistance = 0
+size = medium
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 8,1,6,bites
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Darkhound
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 6
+armor class = 6
+movement rate = 20
+hit dice = 16.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 4
+magic resistance = 0
+size = medium
+morale = 50
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 8,1,6,bites,monsterPoison
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Draghkar
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 15
+armor class = 7
+movement rate = 12
+hit dice = 2.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 18
+magic resistance = 0
+size = medium
+morale = 50
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = none
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Gholam
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 15
+armor class = 0
+movement rate = 12
+hit dice = 16.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 4
+magic resistance = 0
+size = medium
+morale = 50
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 8,1,5,attacks //also has long sword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Gray Man
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 10
+armor class = 8
+movement rate = 12
+hit dice = 7.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 13
+magic resistance = 0
+size = medium
+morale = 50
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 6,1,3,attacks // uses short sword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Grolm
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 2
+armor class = 6
+movement rate = 16
+hit dice = 4.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 16
+magic resistance = 0
+size = medium
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 8,1,5,bites
+attack = 4,1,2,claws
+attack = 4,1,2,claws
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Horse
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 2
+armor class = 7
+movement rate = 24
+hit dice = 3.000000
+treat HD as hit points = yes
+hit dice bonus = 6
+THAC0 = 16
+magic resistance = 0
+size = medium
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Mammal
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,1,1,attacks
+attack = 4,1,1,attacks
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Lopar
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 4
+armor class = 5
+movement rate = 16
+hit dice = 15.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 5
+magic resistance = 0
+size = medium
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 10,1,8,claws
+attack = 10,1,8,claws
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Mountain Cat
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 2
+armor class = 5
+movement rate = 0
+hit dice = 3.000000
+treat HD as hit points = yes
+hit dice bonus = 6
+THAC0 = 16
+magic resistance = 0
+size = medium
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Mammal
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 6,1,3,bites
+attack = 4,1,1,claws
+attack = 4,1,1,claws
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Myrddraal
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 15
+armor class = -2
+movement rate = 16
+hit dice = 16.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 4
+magic resistance = 0
+size = medium
+morale = 50
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 10,1,41attacks,monsterDisease
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Raken
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 2
+armor class = 6
+movement rate = 72
+hit dice = 7.000000
+treat HD as hit points = yes
+hit dice bonus = 4
+THAC0 = 12
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 6,1,3,claws
+attack = 6,1,3,claws
+attack = 4,1,4,tail whips
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Rat|shadow-linked
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 4
+armor class = 6
+movement rate = 6
+hit dice = 0.250000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 20
+magic resistance = 0
+size = small
+morale = 45
+experience point value = 0
+Class = Fighter
+Race = Mammal
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 3,1,0,bites
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Raven|shadow-linked
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 4
+armor class = 6
+movement rate = 16
+hit dice = 0.250000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 20
+magic resistance = 0
+size = small
+morale = 45
+experience point value = 0
+Class = Fighter
+Race = Bird
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 2,1,0,claws
+Undead = none
+\(END)
+
+\(BEGIN)
+name = S'redit
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 2
+armor class = 5
+movement rate = 6
+hit dice = 18.000000
+treat HD as hit points = yes
+hit dice bonus = 0
+THAC0 = 2
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 6,2,5,stamps
+attack = 6,2,5,stamps
+attack = 8,1,15,gores
+Undead = none
+\(END)
+
+\(BEGIN)
+name = To'raken
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 2
+armor class = 5
+movement rate = 48
+hit dice = 11.000000
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 8
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 8,1,6,claws
+attack = 8,1,6,claws
+attack = 6,1,9,tail whips
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Torm
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 4
+armor class = 4
+movement rate = 20
+hit dice = 9.000000
+treat HD as hit points = yes
+hit dice bonus = 6
+THAC0 = 10
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Monster
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 8,1,7,claws
+attack = 8,1,7,claws
+attack = 6,2,3,bites
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Trolloc
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 9
+armor class = 6
+movement rate = 12
+hit dice = 3
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 16
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,2,1,attacks // or by scythesword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Trolloc|1
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 9
+armor class = 6
+movement rate = 12
+hit dice = 3
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 16
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,2,1,attacks
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Trolloc|2
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 9
+armor class = 6
+movement rate = 12
+hit dice = 3
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 16
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,2,1,attacks // or by scythesword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Trolloc|3
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 9
+armor class = 6
+movement rate = 12
+hit dice = 3
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 16
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,2,1,attacks // or by scythesword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Trolloc|4
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 9
+armor class = 6
+movement rate = 12
+hit dice = 3
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 16
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,2,1,attacks // or by scythesword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Trolloc|5
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 9
+armor class = 6
+movement rate = 12
+hit dice = 3
+treat HD as hit points = yes
+hit dice bonus = 3
+THAC0 = 16
+magic resistance = 0
+size = large
+morale = 35
+experience point value = 0
+Class = Fighter
+Race = Shadowspawn
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 4,2,1,attacks // or by scythesword
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Wolf|brown
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 8
+armor class = 6
+movement rate = 20
+hit dice = 2
+treat HD as hit points = yes
+hit dice bonus = 4
+THAC0 = 17
+magic resistance = 0
+size = medium
+morale = 45
+experience point value = 0
+Class = Fighter
+Race = Mammal
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 6,1,1,bites
+Undead = none
+\(END)
+
+\(BEGIN)
+name = Wolf|grey
+icon file = DEFAULT
+miss sound = DEFAULT
+hit sound = DEFAULT
+move sound = DEFAULT
+death sound = DEFAULT
+intelligence = 8
+armor class = 6
+movement rate = 20
+hit dice = 2
+treat HD as hit points = yes
+hit dice bonus = 4
+THAC0 = 17
+magic resistance = 0
+size = medium
+morale = 45
+experience point value = 0
+Class = Fighter
+Race = Mammal
+form = none
+penalty = none
+immunity = none
+Misc Options = none
+item = none
+attack = 6,1,1,bites
+Undead = none
+\(END)
+
+\(BEGIN)
+name = $$Help
+Special Ability = Date,"June 22, 2014"
+Special Ability = ToDo1,"special abilities for all"
+Special Ability = ToDo2,"sounds"
+Special Ability = ToDo3,"icons for those bearing DEFAULT"
+\(END)

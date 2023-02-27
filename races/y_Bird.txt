@@ -1,0 +1,21 @@
+\(BEGIN)
+name = Bird
+height = 2d8+58+((6+1d4)*Male)
+weight = 7d12+93+((45+1d12)*Male)
+age = 1d4+18
+maxage = 1d20+75
+BaseMovement = 12
+AbilityRequirement = Strength 1/25
+AbilityRequirement = Intelligence 1/25
+AbilityRequirement = Wisdom 1/25
+AbilityRequirement = Dexterity 1/25
+AbilityRequirement = Constitution 1/25
+AbilityRequirement = Charisma 1/25
+ChangeClass = no
+DwarfResistance = no
+GnomeResistance = no
+FindSecretDoor = 0
+FindSecretDoorSearching = 1
+Special Ability = raceSuppress,"Y"
+\(END)
+

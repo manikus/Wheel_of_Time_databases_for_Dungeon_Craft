@@ -1,0 +1,2 @@
+// NPC and monster races
+//	Aiel, Amadecian, Arafelan, Bird, Domani, Ghealdaner, Kandoran, Malkieri, Mammal, Monster, Murandian, Ogier, Saldaean, Seafolk, Seanchan, Shadowspawn, Taraboner, Trolloc

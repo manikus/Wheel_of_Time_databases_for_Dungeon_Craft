@@ -1,0 +1,23 @@
+\(BEGIN)
+name = Ogier
+height = 2d12+74+(12*Male)
+weight = 5d40+400+(100*Male)
+age = 2d3+16
+maxage = 1d20+60
+BaseMovement = 12
+AbilityRequirement = Strength 6/20
+AbilityRequirement = Intelligence 3/18
+AbilityRequirement = Wisdom 3/18
+AbilityRequirement = Dexterity 3/16
+AbilityRequirement = Constitution 12/19
+AbilityRequirement = Charisma 3/15
+ChangeClass = no
+DwarfResistance = no
+GnomeResistance = no
+FindSecretDoor = 2
+FindSecretDoorSearching = 4
+SkillAdjRace = HearNoise,Ogier,%,105
+SkillAdjRace = ReadLanguages,Ogier,%,110
+Special Ability = raceSuppress,"Y"
+\(END)
+
